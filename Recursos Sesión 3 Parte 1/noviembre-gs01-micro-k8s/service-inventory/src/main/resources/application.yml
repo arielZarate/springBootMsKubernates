@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Microservices Inventory
+
+management:
+  endpoints:
+    web:
+      base-path: '/services-inventory/actuator'
+      exposure:
+        include: '*'
+
+server:
+  port: 8080

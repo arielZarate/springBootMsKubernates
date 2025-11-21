@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Microservices Notify
+
+management:
+  endpoints:
+    web:
+      base-path: '/services-notify/actuator'
+      exposure:
+        include: '*'
+
+server:
+  port: 8082
