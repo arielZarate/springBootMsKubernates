@@ -1,5 +1,0 @@
-spring:
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/orderdb
-    username: postgres
-    password: 123456789
