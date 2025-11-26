@@ -1,0 +1,1564 @@
+{
+	"info": {
+		"_postman_id": "8be4371d-36ff-4234-9114-88bf3272dd24",
+		"name": "k8sArqui",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3737261",
+		"_collection_link": "https://proyecto-bi-aix.postman.co/workspace/Codearti~60338407-98c1-4821-a638-403c098f2ea0/collection/3737261-8be4371d-36ff-4234-9114-88bf3272dd24?action=share&source=collection_link&creator=3737261"
+	},
+	"item": [
+		{
+			"name": "Inventory Service",
+			"item": [
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "Actuator",
+							"item": [
+								{
+									"name": "actuator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainIS}}/services-inventory/actuator",
+											"host": [
+												"{{domainIS}}"
+											],
+											"path": [
+												"services-inventory",
+												"actuator"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "liveness",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainIS}}/services-inventory/actuator/health/liveness",
+											"host": [
+												"{{domainIS}}"
+											],
+											"path": [
+												"services-inventory",
+												"actuator",
+												"health",
+												"liveness"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "readiness",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainIS}}/services-inventory/actuator/health/readiness",
+											"host": [
+												"{{domainIS}}"
+											],
+											"path": [
+												"services-inventory",
+												"actuator",
+												"health",
+												"readiness"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "actuator/health",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainOS}}/services-order/actuator/health",
+											"host": [
+												"{{domainOS}}"
+											],
+											"path": [
+												"services-order",
+												"actuator",
+												"health"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "circuitbreakers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/services-order/actuator/circuitbreakers",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"services-order",
+												"actuator",
+												"circuitbreakers"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "circuitbreakerevents",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/services-order/actuator/circuitbreakerevents",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"services-order",
+												"actuator",
+												"circuitbreakerevents"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "http://localhost:8081/services-order/actuator/prometheus",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/services-order/actuator/prometheus",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"services-order",
+												"actuator",
+												"prometheus"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "save inventory",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idProduct\": {{secuentialId}},\r\n  \"nameProduct\": \"Lentes\",\r\n  \"price\": 123.5,\r\n  \"stock\": 50\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainIS}}/services-inventory/inventories",
+									"host": [
+										"{{domainIS}}"
+									],
+									"path": [
+										"services-inventory",
+										"inventories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get inventory",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domainIS}}/services-inventory/inventories/{{productId}}",
+									"host": [
+										"{{domainIS}}"
+									],
+									"path": [
+										"services-inventory",
+										"inventories",
+										"{{productId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update inventory",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"orderCount\": 5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainIS}}/services-inventory/inventories/{{productId}}",
+									"host": [
+										"{{domainIS}}"
+									],
+									"path": [
+										"services-inventory",
+										"inventories",
+										"{{productId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get inventories",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainIS}}/services-inventory/inventories",
+									"host": [
+										"{{domainIS}}"
+									],
+									"path": [
+										"services-inventory",
+										"inventories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update inventory  caso error",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"orderCount\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainIS}}/services-inventory/inventories/{{productId}}",
+									"host": [
+										"{{domainIS}}"
+									],
+									"path": [
+										"services-inventory",
+										"inventories",
+										"{{productId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update inventory",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"orderCount\": {{productId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainIS}}/services-inventory/inventories/{{productId}}",
+									"host": [
+										"{{domainIS}}"
+									],
+									"path": [
+										"services-inventory",
+										"inventories",
+										"{{productId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "k8s",
+					"item": [
+						{
+							"name": "save inventory Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idProduct\": {{secuentialId}},\r\n  \"nameProduct\": \"Lentes\",\r\n  \"price\": 123.5,\r\n  \"stock\": 50\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:62795/services-inventory/inventories",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "62795",
+									"path": [
+										"services-inventory",
+										"inventories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get inventories Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:62795/services-inventory/inventories",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "62795",
+									"path": [
+										"services-inventory",
+										"inventories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "k8s Copy",
+					"item": [
+						{
+							"name": "save inventory Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idProduct\": {{secuentialId}},\r\n  \"nameProduct\": \"Lentes\",\r\n  \"price\": 123.5,\r\n  \"stock\": 50\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:62795/services-inventory/inventories",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "62795",
+									"path": [
+										"services-inventory",
+										"inventories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get inventories Copy",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:62795/services-inventory/inventories",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "62795",
+									"path": [
+										"services-inventory",
+										"inventories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Order Service",
+			"item": [
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "Actuator",
+							"item": [
+								{
+									"name": "actuator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainOS}}/services-order/actuator",
+											"host": [
+												"{{domainOS}}"
+											],
+											"path": [
+												"services-order",
+												"actuator"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "actuator/health",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainOS}}/services-order/actuator/health",
+											"host": [
+												"{{domainOS}}"
+											],
+											"path": [
+												"services-order",
+												"actuator",
+												"health"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "circuitbreakers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/services-order/actuator/circuitbreakers",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"services-order",
+												"actuator",
+												"circuitbreakers"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "circuitbreakerevents",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/services-order/actuator/circuitbreakerevents",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"services-order",
+												"actuator",
+												"circuitbreakerevents"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "http://localhost:8081/services-order/actuator/prometheus",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8081/services-order/actuator/prometheus",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8081",
+											"path": [
+												"services-order",
+												"actuator",
+												"prometheus"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "liveness",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainOS}}/services-order/actuator/health/liveness",
+											"host": [
+												"{{domainOS}}"
+											],
+											"path": [
+												"services-order",
+												"actuator",
+												"health",
+												"liveness"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "readiness",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainOS}}/services-order/actuator/health/readiness",
+											"host": [
+												"{{domainOS}}"
+											],
+											"path": [
+												"services-order",
+												"actuator",
+												"health",
+												"readiness"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "get orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domainOS}}/services-order/orders",
+									"host": [
+										"{{domainOS}}"
+									],
+									"path": [
+										"services-order",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get order",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domainOS}}/services-order/orders/{{orderId}}",
+									"host": [
+										"{{domainOS}}"
+									],
+									"path": [
+										"services-order",
+										"orders",
+										"{{orderId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "save order",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialOSId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"codeProduct\": {{secuentialOSId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainOS}}/services-order/orders",
+									"host": [
+										"{{domainOS}}"
+									],
+									"path": [
+										"services-order",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update order",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialOSId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domainOS}}/services-order/orders/{{orderId}}",
+									"host": [
+										"{{domainOS}}"
+									],
+									"path": [
+										"services-order",
+										"orders",
+										"{{orderId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "k8s",
+					"item": [
+						{
+							"name": "save order Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialOSId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"codeProduct\": {{secuentialOSId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:61623/services-order/orders",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "61623",
+									"path": [
+										"services-order",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get orders Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:61623/services-order/orders",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "61623",
+									"path": [
+										"services-order",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update order Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+											"\r",
+											"// Configuración inicial\r",
+											"const config = {\r",
+											"    initialValue: 1000,\r",
+											"    variableName: \"secuentialOSId\",\r",
+											"    step: 1\r",
+											"};\r",
+											"\r",
+											"// Función para generar ID secuencial\r",
+											"function generateSequentialId() {\r",
+											"    try {\r",
+											"        // Obtener valor actual o usar valor inicial\r",
+											"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+											"        \r",
+											"        if (isNaN(currentValue)) {\r",
+											"            currentValue = config.initialValue;\r",
+											"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+											"        }\r",
+											"        \r",
+											"        // Incrementar\r",
+											"        const newValue = currentValue + config.step;\r",
+											"        \r",
+											"        // Guardar en entorno\r",
+											"        pm.environment.set(config.variableName, newValue);\r",
+											"                \r",
+											"        console.log(\"ID generado:\", newValue);\r",
+											"        return newValue;\r",
+											"        \r",
+											"    } catch (error) {\r",
+											"        console.error(\"Error generando ID:\", error);\r",
+											"        return config.initialValue;\r",
+											"    }\r",
+											"}\r",
+											"\r",
+											"// Ejecutar la función\r",
+											"generateSequentialId();"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:60948/services-order/orders/{{orderId}}",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "60948",
+									"path": [
+										"services-order",
+										"orders",
+										"{{orderId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "AWS",
+					"item": [
+						{
+							"name": "Node",
+							"item": [
+								{
+									"name": "update order Copy",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+													"\r",
+													"// Configuración inicial\r",
+													"const config = {\r",
+													"    initialValue: 1000,\r",
+													"    variableName: \"secuentialOSId\",\r",
+													"    step: 1\r",
+													"};\r",
+													"\r",
+													"// Función para generar ID secuencial\r",
+													"function generateSequentialId() {\r",
+													"    try {\r",
+													"        // Obtener valor actual o usar valor inicial\r",
+													"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+													"        \r",
+													"        if (isNaN(currentValue)) {\r",
+													"            currentValue = config.initialValue;\r",
+													"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+													"        }\r",
+													"        \r",
+													"        // Incrementar\r",
+													"        const newValue = currentValue + config.step;\r",
+													"        \r",
+													"        // Guardar en entorno\r",
+													"        pm.environment.set(config.variableName, newValue);\r",
+													"                \r",
+													"        console.log(\"ID generado:\", newValue);\r",
+													"        return newValue;\r",
+													"        \r",
+													"    } catch (error) {\r",
+													"        console.error(\"Error generando ID:\", error);\r",
+													"        return config.initialValue;\r",
+													"    }\r",
+													"}\r",
+													"\r",
+													"// Ejecutar la función\r",
+													"generateSequentialId();"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:60948/services-order/orders/{{orderId}}",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "60948",
+											"path": [
+												"services-order",
+												"orders",
+												"{{orderId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "save order Copy 2",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"// ===== SCRIPT MEJORADO CON PERSISTENCIA =====\r",
+													"\r",
+													"// Configuración inicial\r",
+													"const config = {\r",
+													"    initialValue: 1000,\r",
+													"    variableName: \"secuentialOSId\",\r",
+													"    step: 1\r",
+													"};\r",
+													"\r",
+													"// Función para generar ID secuencial\r",
+													"function generateSequentialId() {\r",
+													"    try {\r",
+													"        // Obtener valor actual o usar valor inicial\r",
+													"        let currentValue = parseInt(pm.environment.get(config.variableName));\r",
+													"        \r",
+													"        if (isNaN(currentValue)) {\r",
+													"            currentValue = config.initialValue;\r",
+													"            console.log(\"Inicializando contador con valor:\", currentValue);\r",
+													"        }\r",
+													"        \r",
+													"        // Incrementar\r",
+													"        const newValue = currentValue + config.step;\r",
+													"        \r",
+													"        // Guardar en entorno\r",
+													"        pm.environment.set(config.variableName, newValue);\r",
+													"                \r",
+													"        console.log(\"ID generado:\", newValue);\r",
+													"        return newValue;\r",
+													"        \r",
+													"    } catch (error) {\r",
+													"        console.error(\"Error generando ID:\", error);\r",
+													"        return config.initialValue;\r",
+													"    }\r",
+													"}\r",
+													"\r",
+													"// Ejecutar la función\r",
+													"generateSequentialId();"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"codeProduct\": {{secuentialOSId}}\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://a3d01bca6405d4ab59a0af4567d87aec-552557708.us-east-2.elb.amazonaws.com/services-order/orders",
+											"protocol": "http",
+											"host": [
+												"a3d01bca6405d4ab59a0af4567d87aec-552557708",
+												"us-east-2",
+												"elb",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"services-order",
+												"orders"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get orders Copy",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-api-key",
+												"value": "aQdEJQUpMO8qMejc4YAyr2lIgmqssOXw9g7JggS2",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://a3d01bca6405d4ab59a0af4567d87aec-552557708.us-east-2.elb.amazonaws.com/services-order/orders",
+											"protocol": "http",
+											"host": [
+												"a3d01bca6405d4ab59a0af4567d87aec-552557708",
+												"us-east-2",
+												"elb",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"services-order",
+												"orders"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "API Gateway",
+							"item": [
+								{
+									"name": "get orders Copy 2",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-api-key",
+												"value": "oyladW2dt56C7j1sp5P7m6GBYYcgijpZ1F51j1Ik",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "https://ln9zgf14pi.execute-api.us-east-2.amazonaws.com/Cordearti-SO-Test-1/orders",
+											"protocol": "https",
+											"host": [
+												"ln9zgf14pi",
+												"execute-api",
+												"us-east-2",
+												"amazonaws",
+												"com"
+											],
+											"path": [
+												"Cordearti-SO-Test-1",
+												"orders"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Notify Service",
+			"item": [
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "Actuator",
+							"item": [
+								{
+									"name": "actuator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainNS}}/services-notify/actuator",
+											"host": [
+												"{{domainNS}}"
+											],
+											"path": [
+												"services-notify",
+												"actuator"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "liveness",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainIS}}/services-notify/actuator/health/liveness",
+											"host": [
+												"{{domainIS}}"
+											],
+											"path": [
+												"services-notify",
+												"actuator",
+												"health",
+												"liveness"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "readiness",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{domainIS}}/services-inventory/actuator/health/readiness",
+											"host": [
+												"{{domainIS}}"
+											],
+											"path": [
+												"services-inventory",
+												"actuator",
+												"health",
+												"readiness"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "get notify",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domainNS}}/services-notify/notify/{{notifyId}}",
+									"host": [
+										"{{domainNS}}"
+									],
+									"path": [
+										"services-notify",
+										"notify",
+										"{{notifyId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all notify",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domainNS}}/services-notify/notify",
+									"host": [
+										"{{domainNS}}"
+									],
+									"path": [
+										"services-notify",
+										"notify"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "k8s",
+					"item": [
+						{
+							"name": "get all notify Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domainNS}}/services-notify/notify",
+									"host": [
+										"{{domainNS}}"
+									],
+									"path": [
+										"services-notify",
+										"notify"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
